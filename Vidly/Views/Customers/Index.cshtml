@@ -7,16 +7,17 @@
 <h2>Customers</h2>
 <table class="table table-bordered table-hover">
     <thead>
-        <tr><td><b />Customers</td></tr>
+        <tr>
+            <th>Customers</th>
+            <th>Discount Rate</th>
+        <tr>
     </thead>
     <tbody>
         @foreach (var customer in Model)
         {
-            @*<tr>
-                <td>@customer.Name</td>
-            </tr>*@
             <tr>
                 <td>@Html.ActionLink(customer.Name, "Details", "Customers", new { customerId = customer.Id }, null)</td>
+                <td>@customer.MembershipType.DiscountRate%</td>
             </tr>
         } 
     </tbody>
