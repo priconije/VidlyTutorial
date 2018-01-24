@@ -5,22 +5,29 @@
 }
 
 <h2>Customers</h2>
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>Customers</th>
-            <th>Membership Type</th>
-        <tr>
-    </thead>
-    <tbody>
-        @foreach (var customer in Model)
-        {
+@if (Model.Count > 0)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
             <tr>
-                <td>@Html.ActionLink(customer.Name, "Details", "Customers", new { customerId = customer.Id }, null)</td>
-                <td>@customer.MembershipType.Name</td>
-            </tr>
-        } 
-    </tbody>
-</table>
+                <th>Customers</th>
+                <th>Membership Type</th>
+            <tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink(customer.Name, "Details", "Customers", new { customerId = customer.Id }, null)</td>
+                    <td>@customer.MembershipType.Name</td>
+                </tr>
+            } 
+        </tbody>
+    </table>
+}
+else
+{
+    <i>No customers found in Database!</i>
+}
 
 
