@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
-using Vidly.ViewModels;
+using WebApplication1.Models;
 
 namespace Vidly.Controllers
 {
@@ -63,30 +62,48 @@ namespace Vidly.Controllers
     //Section 2, Lecture 14
     public class MoviesController : Controller
     {
-        // GET: Movies/Random
-        public ActionResult Random()
+        private ApplicationDbContext _context;
+
+        public MoviesController()
         {
-            var movie = new Movie() { Name = "Shrek!" };
-            var customers = new List<Customer>
-            {
-                new Customer{ Name = "Customer 1"},
-                new Customer{ Name = "Customer 2"}
-            };
-
-            var viewModel = new RandomMovieViewModel()
-            {
-                Movie = movie,
-                Customers = customers
-            };
-
-            return View(viewModel);
+            _context = new ApplicationDbContext();
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+
+        // GET: Movies/Random Primer stranice koja koristi ViewModel
+        //public ActionResult Random()
+        //{
+        //    var movie = new Movie() { Name = "Shrek!" };
+        //    var customers = new List<Customer>
+        //    {
+        //        new Customer{ Name = "Customer 1"},
+        //        new Customer{ Name = "Customer 2"}
+        //    };
+
+        //    var viewModel = new RandomMovieViewModel()
+        //    {
+        //        Movie = movie,
+        //        Customers = customers
+        //    };
+
+        //    return View(viewModel);
+        //}
 
         public ActionResult Index()
         {
-            var allMovies = GetMovies();
-
+            //zahteva using system.data.entity import, ToList je da bi ih odmah povukao iz baze
+            var allMovies= _context.Movies.Include(m => m.Genre).ToList();
             return View(allMovies);
+        }
+
+        public ActionResult Details(int Id)
+        {
+            var movie = _context.Movies.Include(m => m.Genre).SingleOrDefault(m => m.Id == Id);
+            return View(movie);
         }
 
         private IEnumerable<Movie> GetMovies()
