@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Vidly.Models;
+using Vidly.ViewModels;
 using WebApplication1.Models;
 
 namespace Vidly.Controllers
@@ -106,15 +108,55 @@ namespace Vidly.Controllers
             return View(movie);
         }
 
-        private IEnumerable<Movie> GetMovies()
+        public ActionResult New()
         {
-            var listOfMovies = new List<Movie>
+            var genres = _context.Genres.ToList();
+            var newMovieVM = new NewMovieViewModel
             {
-                new Movie { Id = 1, Name = "John Wick" },
-                new Movie { Id = 2, Name = " The Equalizer" }
+                Genres = genres
             };
 
-            return listOfMovies;
+            return View("MovieForm", newMovieVM);
+        }
+        
+        [HttpPost]
+        public ActionResult Save(Movie movie)
+        {
+            if (movie.Id == 0)
+            {
+                movie.DateAdded = DateTime.Today; //danasnji datum kada se dodaje novi film
+                _context.Movies.Add(movie);
+            }
+            else
+            {
+                var movieInDB = _context.Movies.Single(m => m.Id == movie.Id);
+                movieInDB.DateAdded = movie.DateAdded;
+                movieInDB.GenreId = movie.GenreId;
+                movieInDB.Name = movie.Name;
+                movieInDB.NumberInStock = movie.NumberInStock;
+                movieInDB.ReleaseDate = movie.ReleaseDate;
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Movies");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var movieInDB = _context.Movies.SingleOrDefault(mov => mov.Id == id);
+            if (movieInDB.Equals(null))
+            {
+                HttpNotFound();
+            }
+
+            var movieVM = new NewMovieViewModel
+            {
+                Movie = movieInDB,
+                Genres = _context.Genres.ToList(),
+                IsEdit = true
+            };
+
+            return View("MovieForm", movieVM);
         }
     }
 }

@@ -76,7 +76,8 @@ namespace Vidly.Controllers
             var newCustomerVM = new NewCustomerViewModel
             {
                 Customer = customer,
-                MembershipTypes = _context.MembershipTypes.ToList()
+                MembershipTypes = _context.MembershipTypes.ToList(),
+                IsEdit = true
             };
             return View("New", newCustomerVM);
         }

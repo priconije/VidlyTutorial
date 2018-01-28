@@ -18,7 +18,7 @@
             @foreach (var movie in Model)
             {
                 <tr>
-                    <td>@Html.ActionLink(movie.Name, "Details", "Movies", new { Id = movie.Id }, null)</td>
+                    <td>@Html.ActionLink(movie.Name, "Edit", "Movies", new { id = movie.Id }, null)</td>
                     <td>@movie.Genre.Name</td>
                 </tr>
             }
@@ -29,3 +29,5 @@ else
 {
     <i>No Movies found in Database!</i>
 }
+@Html.ActionLink("Add New", "New", "Movies", null, new { @class = "btn btn-primary" })
+
