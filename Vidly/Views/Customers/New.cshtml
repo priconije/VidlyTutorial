@@ -15,6 +15,7 @@ else
 
 @using (Html.BeginForm("Save", "Customers"))
 {
+    @Html.ValidationSummary(true, "Please fix the following errors before attempting to save")
     <div class="form-group">
         @Html.LabelFor(m => m.Customer.Name)
         @Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control" })
@@ -25,6 +26,7 @@ else
         @*Ukoliko zelimo da prikazemo drugaciju labelu, mozemo iskoristiti standardni HTML tag:*@
         <label for="DateOfBirth">Date of Birth</label>
         @Html.TextBoxFor(m => m.Customer.DateOfBirth, "{0:d MMM yyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Customer.DateOfBirth)
     </div>
 
     <div class="form-group">
@@ -39,5 +41,11 @@ else
         </label>
     </div>
     @Html.HiddenFor(m => m.Customer.Id)
+    @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-primary">Save</button>
 }
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    }
