@@ -111,9 +111,8 @@ namespace Vidly.Controllers
         public ActionResult New()
         {
             var genres = _context.Genres.ToList();
-            var newMovieVM = new NewMovieViewModel
+            var newMovieVM = new NewMovieViewModel()
             {
-                Movie = new Movie(),
                 Genres = genres
             };
 
@@ -126,9 +125,8 @@ namespace Vidly.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var movieVM = new NewMovieViewModel
+                var movieVM = new NewMovieViewModel(movie)
                 {
-                    Movie = movie,
                     Genres = _context.Genres.ToList()
                 };
 
@@ -163,9 +161,8 @@ namespace Vidly.Controllers
                 HttpNotFound();
             }
 
-            var movieVM = new NewMovieViewModel
+            var movieVM = new NewMovieViewModel(movieInDB)
             {
-                Movie = movieInDB,
                 Genres = _context.Genres.ToList(),
                 IsEdit = true
             };
