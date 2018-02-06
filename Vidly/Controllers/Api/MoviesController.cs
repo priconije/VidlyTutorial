@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -34,7 +35,7 @@ namespace Vidly.Controllers.Api
             return Ok(Mapper.Map<Movie, MovieDTO>(movieInDb));
         }
 
-        // POST /api/movies/1
+        // POST /api/movies
         [HttpPost]
         public IHttpActionResult CreateMovie(MovieDTO movie)
         {
@@ -42,6 +43,7 @@ namespace Vidly.Controllers.Api
                 return BadRequest();
 
             var newMovie = Mapper.Map<MovieDTO, Movie>(movie);
+            newMovie.DateAdded = DateTime.Now;
 
             _context.Movies.Add(newMovie);
             _context.SaveChanges();
@@ -51,7 +53,7 @@ namespace Vidly.Controllers.Api
             return Created(Request.RequestUri + "/" + movie.Id, movie);
         }
 
-        // PUT /api/movies/1
+        // PUT /api/movies
         [HttpPut]
         public IHttpActionResult UpdateMovie(MovieDTO movie)
         {

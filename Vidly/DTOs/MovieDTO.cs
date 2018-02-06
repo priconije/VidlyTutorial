@@ -13,7 +13,7 @@ namespace Vidly.DTOs
         public string Name { get; set; }
 
         [Required]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
 
         [Required]
         [Range(0, 20, ErrorMessage = "The Number in Stock must be between 0 and 20.")]
